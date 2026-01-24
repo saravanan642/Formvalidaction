@@ -7,6 +7,18 @@ const Myform = () => {
         contact : "",
         email : "",
     })
+
+    const [errors, setErrors] =useState({});
+    const handleChange =(e) =>{
+        const {age,value} =e.target;
+        setData({...Data, [age]:value});
+    };
+
+    const validate =() =>{
+        let newErrors ={};
+        
+
+    }
     return (
         <div>
             <div>
