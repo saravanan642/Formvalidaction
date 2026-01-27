@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const MyForm = () => {
-  // 🔹 Form Model (State)
+  
   const [formData, setFormData] = useState({
     name: "",
     age: "",
@@ -9,41 +9,40 @@ const MyForm = () => {
     email: "",
   });
 
-  // 🔹 Error Model
+
   const [errors, setErrors] = useState({});
 
-  // 🔹 Handle Change
+ 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // 🔹 Validation
+
   const validate = () => {
     let newErrors = {};
 
-    // Name
+ 
     if (!formData.name.trim()) {
       newErrors.name = "Name is required";
     } else if (!/^[A-Za-z\s]+$/.test(formData.name)) {
       newErrors.name = "Name must contain only letters";
     }
 
-    // Age
+   
     if (!formData.age) {
       newErrors.age = "Age is required";
     } else if (!/^\d+$/.test(formData.age)) {
       newErrors.age = "Age must be a number";
     }
 
-    // Contact
     if (!formData.contact) {
       newErrors.contact = "Contact is required";
     } else if (!/^\d{10}$/.test(formData.contact)) {
       newErrors.contact = "Contact must be 10 digits";
     }
 
-    // Email
+   
     if (!formData.email) {
       newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
@@ -54,7 +53,7 @@ const MyForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // 🔹 Handle Submit
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
@@ -63,7 +62,7 @@ const MyForm = () => {
     }
   };
 
-  // 🔹 UI Design
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <form
@@ -74,7 +73,6 @@ const MyForm = () => {
           Registration Form
         </h2>
 
-        {/* Name */}
         <input
           type="text"
           name="name"
@@ -85,7 +83,7 @@ const MyForm = () => {
         />
         {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
 
-        {/* Age */}
+      
         <input
           type="text"
           name="age"
@@ -96,7 +94,7 @@ const MyForm = () => {
         />
         {errors.age && <p className="text-red-500 text-sm">{errors.age}</p>}
 
-        {/* Contact */}
+    
         <input
           type="text"
           name="contact"
@@ -109,7 +107,6 @@ const MyForm = () => {
           <p className="text-red-500 text-sm">{errors.contact}</p>
         )}
 
-        {/* Email */}
         <input
           type="text"
           name="email"
