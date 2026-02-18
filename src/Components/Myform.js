@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
+import emailjs from "@emailjs/browser";
 
 const MyForm = () => {
-  
+
+  const form = useRef();   // ✅ form reference
+
   const [formData, setFormData] = useState({
     name: "",
     age: "",
@@ -9,27 +12,22 @@ const MyForm = () => {
     email: "",
   });
 
-
   const [errors, setErrors] = useState({});
 
- 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-
   const validate = () => {
     let newErrors = {};
 
- 
     if (!formData.name.trim()) {
       newErrors.name = "Name is required";
     } else if (!/^[A-Za-z\s]+$/.test(formData.name)) {
       newErrors.name = "Name must contain only letters";
     }
 
-   
     if (!formData.age) {
       newErrors.age = "Age is required";
     } else if (!/^\d+$/.test(formData.age)) {
@@ -42,7 +40,6 @@ const MyForm = () => {
       newErrors.contact = "Contact must be 10 digits";
     }
 
-   
     if (!formData.email) {
       newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
@@ -53,19 +50,42 @@ const MyForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (validate()) {
-      console.log("Form Data:", formData);
-      alert("Form submitted successfully");
+
+      emailjs
+        .sendForm(
+          "service_0ijrz4e",
+          "template_10cw48x",
+          form.current,
+          "zRv3_fcYGYMfIRxRw"
+        )
+        .then(
+          () => {
+            alert("Email Sent Successfully ✅");
+
+            // ✅ Clear form after submit
+            setFormData({
+              name: "",
+              age: "",
+              contact: "",
+              email: "",
+            });
+          },
+          (error) => {
+            console.log("FAILED...", error.text);
+            alert("Failed to send ❌");
+          }
+        );
     }
   };
-
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <form
+        ref={form}   // ✅ attach ref
         onSubmit={handleSubmit}
         className="w-full max-w-md bg-white p-6 rounded-lg shadow"
       >
@@ -83,7 +103,6 @@ const MyForm = () => {
         />
         {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
 
-      
         <input
           type="text"
           name="age"
@@ -94,7 +113,6 @@ const MyForm = () => {
         />
         {errors.age && <p className="text-red-500 text-sm">{errors.age}</p>}
 
-    
         <input
           type="text"
           name="contact"
@@ -103,21 +121,17 @@ const MyForm = () => {
           onChange={handleChange}
           className="w-full border p-2 rounded mt-3 mb-1"
         />
-        {errors.contact && (
-          <p className="text-red-500 text-sm">{errors.contact}</p>
-        )}
+        {errors.contact && <p className="text-red-500 text-sm">{errors.contact}</p>}
 
         <input
-          type="text"
+          type="email"
           name="email"
           placeholder="Email"
           value={formData.email}
           onChange={handleChange}
           className="w-full border p-2 rounded mt-3 mb-1"
         />
-        {errors.email && (
-          <p className="text-red-500 text-sm">{errors.email}</p>
-        )}
+        {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
 
         <button
           type="submit"
